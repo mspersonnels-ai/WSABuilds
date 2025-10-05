@@ -1,0 +1,25 @@
+name: Build WSA
+on:
+ push:
+   branches:
+     - main
+ workflow_dispatch:
+jobs:
+ build-wsa:
+   runs-on: ubuntu-latest
+   steps:
+   - name: Checkout Repository
+     uses: actions/checkout@v3
+   - name: Install Dependencies
+     run: |
+       sudo apt update
+       sudo apt install -y zip unzip python3-pip
+   - name: Build WSA with Magisk and GApps
+     run: |
+       python3 ./MagiskOnWSA/build.py --gapps --magisk
+       zip -r WSA_Build.zip ./output
+   - name: Upload Build Artifact
+     uses: actions/upload-artifact@v3
+     with:
+       name: WSA_Build
+       path: ./WSA_Build.zip
